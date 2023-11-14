@@ -1,0 +1,101 @@
+@import './tailwind.css';
+
+
+body {
+  font-family: 'Arial', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.container {
+  width: 100%;
+  max-width: 960px;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease-in-out;
+  text-align: center;
+}
+
+.container:hover {
+  transform: scale(1.05);
+}
+
+
+.card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.icon {
+  margin: auto;
+  display: block;
+  padding: 20px;
+  
+}
+
+.dark-theme {
+  background-color: #333;
+  color: #fff;
+}
+
+.light-theme {
+  background-color: #fff;
+  color: #333;
+}
+
+.input {
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  padding: 10px;
+  margin: 10px 0;
+  width: 100%;
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    padding: 10px;
+    margin: auto;
+  }
+
+  .input-box {
+    margin-right:10px ;
+
+  }
+
+  .card {
+
+    padding: 10px;
+    margin: 10px 0;
+  }
+}
+
+@media only screen and (min-width: 601px) and (max-width: 1024px) {
+  .container {
+    padding: 30px;
+  }
+
+  .input-box {
+    width: 80%;
+  }
+
+  .card {
+    padding: 30px;
+    margin: 30px 0;
+  }
+
+  .button {
+    padding: 12px 24px;
+  }
+}
