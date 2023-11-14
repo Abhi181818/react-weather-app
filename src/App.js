@@ -9,32 +9,41 @@ const App = () => {
   const [weather, setWeather] = useState(null);
   const [currentTime, setCurrentTime] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [city, setCity] = useState('Bangalore');
+  const [city, setCity] = useState('');
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
+    const fetchCityName = async (latitude, longitude) => {
+      const apiKey = 'cde08dcb207440d9a38692d44d5a37e7';
+
+      try {
+        const response = await axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`);
+        const city = response.data.results[0].components.city || response.data.results[0].components.town;
+        return city;
+      } catch (error) {
+        console.error('Error fetching city name:', error);
+        return 'UnknownCity';
+      }
+    };
     const fetchWeatherData = async (latitude, longitude) => {
       setIsLoading(true);
       const apiKey = '825b502bf7mshd3009c8060ce4acp1d9cf8jsn3d7b176d1f55';
-
-      const options = {
-        method: 'GET',
-        url: 'https://world-time-by-api-ninjas.p.rapidapi.com/v1/worldtime',
-        params: { city: city },
-        headers: {
-          'X-RapidAPI-Key': apiKey,
-          'X-RapidAPI-Host': 'world-time-by-api-ninjas.p.rapidapi.com',
-        },
-      };
-
       try {
-        const responseTime = await axios.request(options);
         const weatherApiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=afe8699d26e89acfd2702c91649dc12b`;
 
         const response = await axios.get(weatherApiUrl);
         const weatherCondition = response.data.weather[0].main;
         setWeather(weatherCondition);
-
+        const options = {
+          method: 'GET',
+          url: 'https://world-time-by-api-ninjas.p.rapidapi.com/v1/worldtime',
+          params: { city: city },
+          headers: {
+            'X-RapidAPI-Key': apiKey,
+            'X-RapidAPI-Host': 'world-time-by-api-ninjas.p.rapidapi.com',
+          },
+        };
+        const responseTime = await axios.request(options);
         // const timezoneOffset = response.data.timezone;
         // const currentHour = new Date().getUTCHours();
         // const localHour = (currentHour + timezoneOffset / 3600) % 24; 
@@ -63,7 +72,10 @@ const App = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         const { latitude, longitude } = position.coords;
+        // console.log(latitude, longitude);
+        fetchCityName(latitude, longitude).then((city) => { setCity(city) });
         fetchWeatherData(latitude, longitude);
+
       });
     } else {
       console.error('Geolocation is not supported by this browser.');
